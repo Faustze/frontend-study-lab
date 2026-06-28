@@ -357,3 +357,29 @@
     padding: 72px 16px 32px;
   }
 }
+
+/* ===== Footer ===== */
+.app-footer {
+  margin-top: auto;
+  padding-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(28, 31, 22, 0.4);
+}
+
+.footer-separator {
+  color: rgba(28, 31, 22, 0.2);
+}
+
+.footer-link {
+  color: rgba(28, 31, 22, 0.45);
+  text-decoration: none;
+  transition: color 0.15s;
+
+  &:hover {
+    color: #d96b2b;
+  }
+}

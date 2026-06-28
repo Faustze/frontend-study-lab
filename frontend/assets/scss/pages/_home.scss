@@ -6,6 +6,12 @@
   margin: 0 auto;
 }
 
+.logo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 /* ===== Hero ===== */
 .hero {
   margin-bottom: 28px;

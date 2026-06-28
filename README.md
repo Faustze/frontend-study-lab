@@ -4,6 +4,8 @@
 
 A practice-first learning platform for frontend development. Learn JavaScript, TypeScript, CSS, Vue, and more through interactive examples and hands-on coding — not documentation.
 
+![Readme banner](./readme-banner.svg)
+
 ## Why This Project?
 
 Most tutorials drown you in theory. This is different. Each topic gives you:

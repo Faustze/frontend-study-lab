@@ -19,25 +19,25 @@ const mockProgress: UserProgress = {
 
 export const handlers = [
   // GET /api/auth/me
-  http.get('/api/auth/me', async () => {
+  http.get('*/api/auth/me', async () => {
     await delay(100)
     return HttpResponse.json({ data: mockUser })
   }),
 
   // POST /api/auth/logout
-  http.post('/api/auth/logout', async () => {
+  http.post('*/api/auth/logout', async () => {
     await delay(100)
     return HttpResponse.json({ data: null })
   }),
 
   // GET /api/progress
-  http.get('/api/progress', async () => {
+  http.get('*/api/progress', async () => {
     await delay(100)
     return HttpResponse.json({ data: mockProgress })
   }),
 
   // POST /api/progress/complete
-  http.post('/api/progress/complete', async ({ request }) => {
+  http.post('*/api/progress/complete', async ({ request }) => {
     await delay(100)
     const body = await request.json() as { moduleSlug: string, xpReward: number }
     mockProgress.xp += body.xpReward
@@ -48,7 +48,7 @@ export const handlers = [
   }),
 
   // POST /api/progress/challenge/complete
-  http.post('/api/progress/challenge/complete', async ({ request }) => {
+  http.post('*/api/progress/challenge/complete', async ({ request }) => {
     await delay(100)
     const body = await request.json() as { moduleSlug: string, challengeId: string, xpReward: number }
     mockProgress.xp += body.xpReward

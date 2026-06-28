@@ -1,6 +1,8 @@
 import type { ApiError, ApiResponse } from './types'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
+function getBaseUrl(): string {
+  return import.meta.env.VITE_API_URL || '/api'
+}
 
 class ApiClient {
   baseUrl: string
@@ -15,7 +17,8 @@ class ApiClient {
   }
 
   private async request<T>(path: string, options: RequestInit = {}): Promise<T> {
-    const url = `${this.baseUrl}${path}`
+    const baseUrl = this.baseUrl || getBaseUrl()
+    const url = `${baseUrl}${path}`
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...(options.headers as Record<string, string>),
@@ -51,4 +54,4 @@ class ApiClient {
   }
 }
 
-export const api = new ApiClient(API_BASE_URL)
+export const api = new ApiClient(getBaseUrl())

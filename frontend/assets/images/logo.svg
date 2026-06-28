@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF8C00"/>
+      <stop offset="60%" stop-color="#FF5500"/>
+      <stop offset="100%" stop-color="#CC2E00"/>
+    </linearGradient>
+    <linearGradient id="xp-bar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFD166"/>
+      <stop offset="100%" stop-color="#7EE8A2"/>
+    </linearGradient>
+    <clipPath id="cc">
+      <rect x="0" y="0" width="300" height="300" rx="60"/>
+    </clipPath>
+  </defs>
+
+  <rect x="0" y="0" width="300" height="300" rx="60" fill="url(#bg-grad)"/>
+
+  <g opacity="0.08">
+    <circle cx="30" cy="30" r="2" fill="white"/><circle cx="60" cy="30" r="2" fill="white"/><circle cx="90" cy="30" r="2" fill="white"/><circle cx="120" cy="30" r="2" fill="white"/><circle cx="150" cy="30" r="2" fill="white"/><circle cx="180" cy="30" r="2" fill="white"/><circle cx="210" cy="30" r="2" fill="white"/><circle cx="240" cy="30" r="2" fill="white"/><circle cx="270" cy="30" r="2" fill="white"/>
+    <circle cx="30" cy="60" r="2" fill="white"/><circle cx="60" cy="60" r="2" fill="white"/><circle cx="90" cy="60" r="2" fill="white"/><circle cx="120" cy="60" r="2" fill="white"/><circle cx="150" cy="60" r="2" fill="white"/><circle cx="180" cy="60" r="2" fill="white"/><circle cx="210" cy="60" r="2" fill="white"/><circle cx="240" cy="60" r="2" fill="white"/><circle cx="270" cy="60" r="2" fill="white"/>
+    <circle cx="30" cy="90" r="2" fill="white"/><circle cx="60" cy="90" r="2" fill="white"/><circle cx="90" cy="90" r="2" fill="white"/><circle cx="120" cy="90" r="2" fill="white"/><circle cx="150" cy="90" r="2" fill="white"/><circle cx="180" cy="90" r="2" fill="white"/><circle cx="210" cy="90" r="2" fill="white"/><circle cx="240" cy="90" r="2" fill="white"/><circle cx="270" cy="90" r="2" fill="white"/>
+  </g>
+
+  <rect x="18" y="18" width="44" height="22" rx="6" fill="#FFD166" opacity="0.92"/>
+  <text x="40" y="33" font-family="'Courier New',monospace" font-size="11" font-weight="700" fill="#7A4800" text-anchor="middle">+XP</text>
+
+  <rect x="238" y="18" width="44" height="22" rx="6" fill="white" opacity="0.18"/>
+  <text x="260" y="33" font-family="'Courier New',monospace" font-size="11" font-weight="700" fill="white" text-anchor="middle">LVL 7</text>
+
+  <polygon points="274,46 276,52 282,52 277,56 279,62 274,58 269,62 271,56 266,52 272,52" fill="#FFD166" opacity="0.85"/>
+
+  <text x="150" y="195" font-family="'Courier New',monospace" font-size="148" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="-2">Fsl</text>
+
+  <rect x="20" y="232" width="180" height="7" rx="3.5" fill="white" opacity="0.2"/>
+  <rect x="20" y="232" width="126" height="7" rx="3.5" fill="url(#xp-bar)"/>
+  <text x="20" y="248" font-family="'Courier New',monospace" font-size="9" font-weight="600" fill="white" opacity="0.6">XP 630 / 1000</text>
+
+  <rect x="210" y="228" width="72" height="22" rx="6" fill="white" opacity="0.15"/>
+  <text x="246" y="243" font-family="'Courier New',monospace" font-size="10" font-weight="600" fill="#FFD166" text-anchor="middle">&#x1F525; 14d</text>
+
+  <path d="M0 262 Q40 245 80 258 Q120 271 160 252 Q200 234 240 250 Q270 262 300 248 L300 300 L0 300 Z" fill="#7EE8A2" opacity="0.75" clip-path="url(#cc)"/>
+  <path d="M0 278 Q50 263 100 275 Q150 287 200 270 Q245 255 300 270 L300 300 L0 300 Z" fill="#FFFFFF" opacity="0.45" clip-path="url(#cc)"/>
+  <path d="M0 290 Q60 278 120 288 Q180 298 240 284 Q270 277 300 286 L300 300 L0 300 Z" fill="#A8F0C0" opacity="0.65" clip-path="url(#cc)"/>
+
+  <polygon points="22,270 30,262 38,270 30,278" fill="#7EE8A2" opacity="0.9"/>
+  <polygon points="22,270 30,278 38,270 30,274" fill="#3DBF7A" opacity="0.6"/>
+
+  <rect x="240" y="262" width="44" height="22" rx="6" fill="#7EE8A2" opacity="0.25"/>
+  <text x="262" y="277" font-family="'Courier New',monospace" font-size="10" font-weight="600" fill="#A8F0C0" text-anchor="middle">&#x2713; done</text>
+</svg>

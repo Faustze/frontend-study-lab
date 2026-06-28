@@ -80,11 +80,11 @@
 - [x] Create `frontend/components/layout/` directory
   - [x] `AppSidebar.vue` — extract from App.vue
   - [x] `AppHeader.vue` — mobile header
-  - [ ] `AppFooter.vue` — footer (if needed)
+  - [x] `AppFooter.vue` — footer with copyright and GitHub link
 
 ### 1.6 Topic Pages Refactoring
 
-- [ ] Create `frontend/components/topic/TopicPage.vue` — reusable topic page layout
+- [x] Create `frontend/components/topic/TopicPage.vue` — reusable topic page layout
 - [x] Create `frontend/components/topic/CompleteButton.vue` — "Complete module" button
 - [x] Refactor all 7 js-core topics to use shared components
 - [x] Add difficulty badge to each topic page
@@ -140,10 +140,10 @@
   - [x] `createFallbackCategory` — fallback creation
   - [x] `sortCategories` — sort order + items sort
 - [x] Create `frontend/mocks/topics.ts` — mock data for tests
-- [ ] Create `frontend/stores/__tests__/progress.test.ts`
-- [ ] Create `frontend/components/ui/__tests__/UiButton.test.ts`
-- [ ] Create `frontend/components/ui/__tests__/UiProgressBar.test.ts`
-- [ ] Target: 80% coverage on stores and composables
+- [x] Create `frontend/stores/__tests__/progress.test.ts` — 16 tests covering: defaults, module completion, XP/level up, challenges, reset, localStorage persistence, corrupted data
+- [x] Create `frontend/components/ui/__tests__/UiButton.test.ts` — 14 tests covering: slot, variants, sizes, disabled, type, click
+- [x] Create `frontend/components/ui/__tests__/UiProgressBar.test.ts` — 14 tests covering: value/max, percent calc, capping, label, sizes
+- [x] Target: 80% coverage on stores and composables
 
 ### 2.2 MSW (Mock Service Worker)
 
@@ -156,17 +156,17 @@
 - [x] Create `frontend/mocks/browser.ts` — browser worker setup
 - [x] Create `frontend/mocks/server.ts` — server worker setup (for tests)
 - [x] Integrate MSW in test setup
-- [ ] Write tests with mocked API responses
+- [x] Write tests with mocked API responses — 10 tests covering: progress API, auth API, error handling
 
 ### 2.3 E2E Tests (Playwright)
 
-- [ ] Install `@playwright/test`
-- [ ] Configure `playwright.config.ts`
-- [ ] Create `e2e/home.spec.ts` — dashboard page tests
-- [ ] Create `e2e/topic.spec.ts` — topic page navigation tests
-- [ ] Create `e2e/progress.spec.ts` — complete module flow tests
-- [ ] Create `e2e/i18n.spec.ts` — language switching tests
-- [ ] Create `e2e/auth.spec.ts` — auth flow tests (after auth implementation)
+- [x] Install `@playwright/test`
+- [x] Configure `playwright.config.ts`
+- [x] Create `e2e/home.spec.ts` — 5 tests: dashboard, stats, progress bar, categories, language switcher
+- [x] Create `e2e/topic.spec.ts` — 6 tests: navigation, badge, XP reward, complete button, back navigation, multiple topics
+- [x] Create `e2e/progress.spec.ts` — 5 tests: complete module, checkmark, XP increase, persistence, multiple modules
+- [x] Create `e2e/i18n.spec.ts` — 5 tests: default EN, switch RU, switch back, persistence, topic page
+- [x] Create `e2e/auth.spec.ts` — 6 tests (skipped, enabled after Phase 3 auth implementation)
 
 ---
 

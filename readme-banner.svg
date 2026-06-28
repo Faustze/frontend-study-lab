@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF8C00"/>
+      <stop offset="60%" stop-color="#FF5500"/>
+      <stop offset="100%" stop-color="#CC2E00"/>
+    </linearGradient>
+    <linearGradient id="xp-bar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFD166"/>
+      <stop offset="100%" stop-color="#7EE8A2"/>
+    </linearGradient>
+    <clipPath id="rc">
+      <rect x="28" y="28" width="144" height="144" rx="30"/>
+    </clipPath>
+  </defs>
+
+  <rect width="900" height="200" rx="12" fill="#111111"/>
+  <rect x="0" y="0" width="6" height="200" rx="3" fill="#FF6B00"/>
+
+  <rect x="28" y="28" width="144" height="144" rx="30" fill="url(#bg-grad)"/>
+  <g opacity="0.08">
+    <circle cx="48" cy="48" r="1.5" fill="white"/><circle cx="72" cy="48" r="1.5" fill="white"/><circle cx="96" cy="48" r="1.5" fill="white"/><circle cx="120" cy="48" r="1.5" fill="white"/><circle cx="144" cy="48" r="1.5" fill="white"/>
+    <circle cx="48" cy="72" r="1.5" fill="white"/><circle cx="72" cy="72" r="1.5" fill="white"/><circle cx="96" cy="72" r="1.5" fill="white"/><circle cx="120" cy="72" r="1.5" fill="white"/><circle cx="144" cy="72" r="1.5" fill="white"/>
+  </g>
+  <rect x="36" y="36" width="32" height="14" rx="4" fill="#FFD166" opacity="0.9"/>
+  <text x="52" y="47" font-family="'Courier New',monospace" font-size="8" font-weight="700" fill="#7A4800" text-anchor="middle">+XP</text>
+  <rect x="104" y="36" width="36" height="14" rx="4" fill="white" opacity="0.18"/>
+  <text x="122" y="47" font-family="'Courier New',monospace" font-size="8" font-weight="700" fill="white" text-anchor="middle">LVL 7</text>
+  <polygon points="138,54 139.5,58 144,58 140.5,60.5 142,65 138,62.5 134,65 135.5,60.5 132,58 136.5,58" fill="#FFD166" opacity="0.85"/>
+
+  <text x="100" y="138" font-family="'Courier New',monospace" font-size="76" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="-2">Fsl</text>
+
+  <rect x="32" y="148" width="88" height="5" rx="2.5" fill="white" opacity="0.2"/>
+  <rect x="32" y="148" width="62" height="5" rx="2.5" fill="url(#xp-bar)"/>
+
+  <path d="M28 158 Q48 148 68 156 Q88 164 108 152 Q128 140 148 150 Q162 157 172 148 L172 172 L28 172 Z" fill="#7EE8A2" opacity="0.75" clip-path="url(#rc)"/>
+  <path d="M28 165 Q55 155 82 164 Q109 173 136 160 Q155 150 172 160 L172 172 L28 172 Z" fill="#FFFFFF" opacity="0.45" clip-path="url(#rc)"/>
+
+  <text x="196" y="82" font-family="'Courier New',monospace" font-size="28" font-weight="700" fill="white">Frontend Study Lab</text>
+  <text x="198" y="110" font-family="'Courier New',monospace" font-size="14" fill="#666">Practice-first · JS · TS · Vue · CSS</text>
+  <rect x="198" y="128" width="80" height="22" rx="11" fill="#FF6B00" opacity="0.15"/>
+  <text x="238" y="143" font-family="'Courier New',monospace" font-size="11" fill="#FF8C2A" text-anchor="middle">Interactive</text>
+  <rect x="288" y="128" width="84" height="22" rx="11" fill="#FF6B00" opacity="0.15"/>
+  <text x="330" y="143" font-family="'Courier New',monospace" font-size="11" fill="#FF8C2A" text-anchor="middle">Hands-on</text>
+  <rect x="382" y="128" width="88" height="22" rx="11" fill="#7EE8A2" opacity="0.12"/>
+  <text x="426" y="143" font-family="'Courier New',monospace" font-size="11" fill="#7EE8A2" text-anchor="middle">Gamified XP</text>
+</svg>

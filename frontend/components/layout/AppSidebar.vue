@@ -1,6 +1,9 @@
 <template>
   <aside class="sidebar" :class="{ open: ui.mobileSidebarOpen }">
     <div class="sidebar-header">
+      <div class="logo">
+        <img src="@/assets/images/logo.svg" alt="Fsl" height="36">
+      </div>
       <LanguageSwitcher />
       <div class="user-stats">
         <div class="stat">

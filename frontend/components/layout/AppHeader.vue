@@ -1,5 +1,6 @@
 <template>
   <header class="mobile-header">
+    <img src="@/assets/images/logo.svg" alt="Fsl" height="36">
     <button class="burger" :class="{ open: ui.mobileSidebarOpen }" @click="ui.toggleMobileSidebar()">
       <span />
       <span />

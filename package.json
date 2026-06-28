@@ -12,6 +12,7 @@
     "lint:fix": "eslint --config frontend/eslint.config.mjs frontend/ --fix",
     "test": "vitest --config frontend/vitest.config.ts",
     "test:run": "vitest run --config frontend/vitest.config.ts",
+    "test:e2e": "playwright test --config frontend/playwright.config.ts",
     "prepare": "husky"
   },
   "dependencies": {
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.2",
     "@iconify/vue": "^5.0.1",
+    "@playwright/test": "^1.61.1",
     "@testing-library/vue": "^8.1.0",
     "@types/node": "^22.15.3",
     "@vitejs/plugin-vue": "^6.0.7",

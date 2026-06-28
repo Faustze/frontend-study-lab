@@ -8,3 +8,7 @@ coverage
 
 # MSW auto-generated service worker
 **/mockServiceWorker.js
+
+# e2e
+playwright-report
+test-results
