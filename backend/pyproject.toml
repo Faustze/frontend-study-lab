@@ -17,3 +17,15 @@ select = ["E", "F", "I", "UP", "B"]
 [tool.ruff.lint.per-file-ignores]
 # conftest sets env vars before importing the app — imports can't be at top
 "tests/conftest.py" = ["E402"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["app"]
+# Pydantic/SQLAlchemy dynamic bases need their plugins' semantics;
+# keep strictness on our own code without fighting the frameworks
+disallow_subclassing_any = false
+
+[[tool.mypy.overrides]]
+module = "authlib.*"
+ignore_missing_imports = true

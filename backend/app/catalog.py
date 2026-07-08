@@ -16,8 +16,9 @@ CHALLENGE_XP_CAP = 50
 
 
 @lru_cache
-def module_catalog() -> dict:
-    return json.loads(_DATA_FILE.read_text())
+def module_catalog() -> "dict[str, int]":
+    catalog: dict[str, int] = json.loads(_DATA_FILE.read_text())
+    return catalog
 
 
 def module_xp(slug: str) -> "int | None":

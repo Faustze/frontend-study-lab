@@ -20,8 +20,10 @@ class UserProgress(Base):
     )
     # Single source of truth for XP; level and xp-within-level are derived
     total_xp: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
-    completed_modules: Mapped[list] = mapped_column(PortableJSON, default=list, nullable=False)
-    completed_challenges: Mapped[dict] = mapped_column(PortableJSON, default=dict, nullable=False)
+    completed_modules: Mapped[list[str]] = mapped_column(PortableJSON, default=list, nullable=False)
+    completed_challenges: Mapped[dict[str, list[str]]] = mapped_column(
+        PortableJSON, default=dict, nullable=False
+    )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )

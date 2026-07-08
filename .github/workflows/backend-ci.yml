@@ -30,6 +30,9 @@ jobs:
       - name: Lint (ruff)
         run: ruff check app tests scripts
 
+      - name: Type check (mypy)
+        run: mypy
+
       - name: Tests
         run: pytest -q
 

@@ -287,7 +287,7 @@
 
 - [x] Create `.github/workflows/backend-ci.yml`:
   - [x] Python linting (ruff)
-  - [ ] Type checking (mypy)
+  - [x] Type checking (mypy)
   - [x] Run tests
   - [x] Build Docker image
 - [ ] Create `.github/workflows/deploy.yml`:

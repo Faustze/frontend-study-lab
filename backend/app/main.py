@@ -26,5 +26,5 @@ app.include_router(progress.router, prefix="/api/progress", tags=["progress"])
 
 
 @app.get("/health")
-async def health() -> dict:
+async def health() -> dict[str, str]:
     return {"status": "ok"}

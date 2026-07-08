@@ -1,5 +1,5 @@
 import json
-from typing import Annotated
+from typing import Annotated, Any
 from urllib.parse import urlencode
 
 from authlib.integrations.starlette_client import OAuth, OAuthError
@@ -58,7 +58,7 @@ def _register_providers() -> None:
 _register_providers()
 
 
-def _get_client(provider: str):
+def _get_client(provider: str) -> Any:
     if provider not in PROVIDERS:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Unknown provider")
     client = oauth.create_client(provider)
@@ -67,7 +67,7 @@ def _get_client(provider: str):
     return client
 
 
-async def _fetch_profile(provider: str, client, token: dict) -> dict:
+async def _fetch_profile(provider: str, client: Any, token: dict[str, Any]) -> dict[str, str]:
     """Normalize provider profiles to one shape."""
     if provider == "google":
         info = token.get("userinfo") or {}
@@ -110,24 +110,24 @@ async def _fetch_profile(provider: str, client, token: dict) -> dict:
     }
 
 
-def _user_payload(user: User) -> dict:
+def _user_payload(user: User) -> dict[str, Any]:
     return UserOut.model_validate(user).model_dump(by_alias=True, mode="json")
 
 
 @router.get("/me")
-async def me(user: Annotated[User, Depends(get_current_user)]) -> dict:
+async def me(user: Annotated[User, Depends(get_current_user)]) -> dict[str, Any]:
     return {"data": _user_payload(user)}
 
 
 @router.post("/logout")
-async def logout() -> dict:
+async def logout() -> dict[str, Any]:
     # JWTs are stateless: the client discards the token. Kept as an
     # endpoint so the frontend contract (and future revocation) holds.
     return {"data": None}
 
 
 @router.post("/dev-login")
-async def dev_login(db: DbDep) -> dict:
+async def dev_login(db: DbDep) -> dict[str, Any]:
     """Mock login for local development and e2e tests — disabled unless
     DEV_LOGIN_ENABLED=true. Never enable in production."""
     if not get_settings().dev_login_enabled:
@@ -147,7 +147,7 @@ async def dev_login(db: DbDep) -> dict:
 # NOTE: parameterized routes must stay below the literal ones
 # (/me, /logout, /dev-login) or they would swallow those paths.
 @router.get("/{provider}")
-async def login(provider: str, request: Request):
+async def login(provider: str, request: Request) -> Any:
     """Start the OAuth flow. The frontend passes a `state` it generated
     (CSRF token); it is round-tripped through the provider and returned
     to the frontend callback so the client can verify it."""
@@ -158,7 +158,7 @@ async def login(provider: str, request: Request):
 
 
 @router.get("/{provider}/callback")
-async def auth_callback(provider: str, request: Request, db: DbDep):
+async def auth_callback(provider: str, request: Request, db: DbDep) -> RedirectResponse:
     client = _get_client(provider)
     settings = get_settings()
     frontend_callback = f"{settings.frontend_url}/auth/callback"
