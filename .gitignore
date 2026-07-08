@@ -5,6 +5,7 @@ coverage
 .DS_Store
 *.tsbuildinfo
 .env
+.mypy_cache/
 
 # MSW auto-generated service worker
 **/mockServiceWorker.js
