@@ -1,20 +1,17 @@
 import asyncio
-import os
 
 from alembic import context
-from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+from app.config import get_settings
 from app.database import Base
 from app.models import User, UserProgress  # noqa: F401 — populate metadata
 
-load_dotenv()
-
 config = context.config
-config.set_main_option(
-    "sqlalchemy.url",
-    os.environ.get("DATABASE_URL", "postgresql+asyncpg://studylab:studylab@localhost:5432/studylab"),
-)
+# Settings normalize postgres:// URLs (as handed out by Railway/Render)
+# to postgresql+asyncpg:// — reading os.environ directly here would
+# make SQLAlchemy look for psycopg2, which is not installed.
+config.set_main_option("sqlalchemy.url", get_settings().database_url)
 
 target_metadata = Base.metadata
 
