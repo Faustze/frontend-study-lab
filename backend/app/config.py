@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -7,6 +8,17 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     database_url: str = "postgresql+asyncpg://studylab:studylab@localhost:5432/studylab"
+
+    @field_validator("database_url")
+    @classmethod
+    def _force_asyncpg_scheme(cls, url: str) -> str:
+        """Hosting platforms (Railway, Render, Heroku) hand out
+        postgres:// or postgresql:// URLs; SQLAlchemy needs the
+        async driver spelled out."""
+        for prefix in ("postgres://", "postgresql://"):
+            if url.startswith(prefix):
+                return "postgresql+asyncpg://" + url[len(prefix):]
+        return url
 
     jwt_secret: str = "change-me-in-production"
     jwt_algorithm: str = "HS256"

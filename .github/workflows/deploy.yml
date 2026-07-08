@@ -35,6 +35,13 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+
+      # SPA fallback: GitHub Pages serves 404.html for unknown paths,
+      # so deep links like /auth/callback reach the Vue router
+      - name: Add SPA fallback
+        run: cp frontend/dist/index.html frontend/dist/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

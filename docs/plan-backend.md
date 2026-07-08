@@ -237,19 +237,19 @@
 - [ ] Create project in Google Cloud Console
 - [ ] Enable Google+ API
 - [ ] Create OAuth2 credentials
-- [ ] Set redirect URI: `http://localhost:8000/api/auth/google/callback`
-- [ ] Store `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `.env`
+- [x] Set redirect URI: `https://study.faustze.tech/api/auth/google/callback`
+- [x] Store `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `.env`
 
 ### 4.2 Twitch OAuth2
 
 - [ ] Register application in Twitch Developer Console
-- [ ] Set redirect URI: `http://localhost:8000/api/auth/twitch/callback`
+- [x] Set redirect URI: `https://study.faustze.tech/api/auth/twitch/callback`
 - [ ] Store `TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET` in `.env`
 
 ### 4.3 Discord OAuth2
 
 - [ ] Create application in Discord Developer Portal
-- [ ] Add redirect URI: `http://localhost:8000/api/auth/discord/callback`
+- [x] Add redirect URI: `https://study.faustze.tech/api/auth/discord/callback`
 - [ ] Store `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` in `.env`
 
 ---
