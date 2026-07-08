@@ -1,9 +1,9 @@
 # Railway config — the service Root Directory must be set to /backend
 [build]
-builder = "dockerfile"
+builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
 healthcheckPath = "/health"
 healthcheckTimeout = 60
-restartPolicyType = "on_failure"
+restartPolicyType = "ON_FAILURE"
