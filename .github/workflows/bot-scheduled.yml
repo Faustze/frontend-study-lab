@@ -1,0 +1,54 @@
+name: Bot scheduled / dispatched
+on:
+  schedule:
+    # Москва = UTC+3 (без перевода часов)
+    - cron: "0 21 * * *"   # 00:00 МСК — здоровье кода
+    # - cron: "0 23 * * *"   # 02:00 МСК — тесты
+    # - cron: "0 1 * * *"    # 04:00 МСК — качество кода
+    # - cron: "0 3 * * *"    # 06:00 МСК — документация и i18n
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: "Задача для бота"
+        required: false
+
+jobs:
+  bot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.BOT_PAT }}
+          fetch-depth: 0
+
+      - name: Pick task for this run
+        id: task
+        env:
+          MANUAL_PROMPT: ${{ inputs.prompt }}
+        run: |
+          if [ -n "$MANUAL_PROMPT" ]; then
+            PROMPT="$MANUAL_PROMPT"
+          else
+            case "${{ github.event.schedule }}" in
+              "0 21 * * *") PROMPT='Прогони pnpm lint, pnpm typecheck и pnpm test:run. Если есть падения — исправь их и открой PR в ветку bot/nightly-health-<дата>. Ничего не мержить. Если всё чисто — заверши без PR.' ;;
+              "0 23 * * *") PROMPT='Найди в frontend/ один компонент или composable без unit-тестов (или со слабым покрытием), напиши для него тесты в стиле существующих (vitest + vue test utils + msw при необходимости), убедись что pnpm test:run проходит, и открой PR в ветку bot/nightly-tests-<дата>. Не более одного компонента за ночь. Ничего не мержить.' ;;
+              "0 1 * * *") PROMPT='Проведи небольшой рефакторинг качества кода в frontend/: найди одно место с дублированием, мёртвым кодом или устаревшим паттерном, аккуратно исправь, прогони pnpm lint, pnpm typecheck и pnpm test:run, и открой PR в ветку bot/nightly-quality-<дата>. Изменение должно быть маленьким и легко ревьюибельным. Ничего не мержить.' ;;
+              "0 3 * * *") PROMPT='Проверь консистентность документации и i18n: README соответствует актуальным скриптам package.json, ключи локализации vue-i18n не имеют пропусков между языками. Если нашёл расхождения — исправь и открой PR в ветку bot/nightly-docs-<дата>. Если всё в порядке — заверши без PR.' ;;
+              *) PROMPT='Прогони pnpm lint и pnpm test:run. Если есть падения — исправь и открой PR в ветку bot/nightly-<дата>. Ничего не мержить.' ;;
+            esac
+          fi
+          {
+            echo "prompt<<EOF"
+            echo "$PROMPT"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.BOT_PAT }}
+          prompt: ${{ steps.task.outputs.prompt }}
+          claude_args: "--model claude-sonnet-5 --max-turns 40"
