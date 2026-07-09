@@ -42,11 +42,9 @@ JWT_SECRET=generate-a-random-secret
 
 ```md
 frontend-study-lab/
-├── .env # ← NEVER COMMIT (gitignored)
-├── .env.example # ← Template with placeholders
 ├── .github/
-│ └── workflows/ # CI/CD pipelines
-├── backend/ # FastAPI backend (future)
+│ └── workflows/ # CI, Backend CI, deploy, bot automation
+├── backend/ # FastAPI backend
 │ ├── .env # ← NEVER COMMIT
 │ ├── .env.example # ← Template
 │ ├── alembic/ # Database migrations
@@ -54,12 +52,15 @@ frontend-study-lab/
 │ │ ├── config.py # Settings loaded from .env
 │ │ ├── models/ # SQLAlchemy models
 │ │ ├── routes/ # API endpoints
+│ │ ├── schemas/ # Pydantic request/response schemas
 │ │ └── services/ # Business logic
-│ └── tests/
+│ └── tests/ # Pytest suite
 ├── docs/
-│ ├── AI-GUIDE.md # This file
+│ ├── AGENTS.md # This file
 │ ├── plan-frontend.md # Frontend development plan
 │ ├── plan-backend.md # Backend development plan
+│ ├── AUTH.md # Auth system spec
+│ ├── MIGRATION.md # Nuxt migration plan
 │ └── skeleton.md # Topic creation template
 ├── frontend/
 │ ├── .env # ← NEVER COMMIT (Vite env)
@@ -81,8 +82,8 @@ frontend-study-lab/
 │ └── vitest.config.ts
 ├── .gitignore
 ├── .husky/
+├── .vscode/ # F5 launch config (db + backend debugger + frontend)
 ├── docker-compose.yml # Local development (safe — no secrets)
-├── index.html
 ├── package.json
 └── README.md
 ```
@@ -102,8 +103,9 @@ VITE_USE_MSW=true
 ### Backend (`backend/.env`)
 
 ```bash
-# Database (local Docker — safe defaults)
-DATABASE_URL=postgresql://studylab:studylab@localhost:5432/studylab
+# Database (local Docker — safe defaults; docker-compose maps the
+# container's 5432 to host port 5433, and SQLAlchemy needs +asyncpg)
+DATABASE_URL=postgresql+asyncpg://studylab:studylab@localhost:5433/studylab
 
 # JWT — generate with: openssl rand -hex 32
 JWT_SECRET=change-me-in-production
@@ -139,10 +141,10 @@ git diff --cached | grep -iE "(api_key|api_secret|password|token|secret|private_
 # If this outputs anything — STOP and remove the secrets
 
 # 4. Run linting
-npm run lint
+pnpm run lint
 
 # 5. Run type checking
-npm run typecheck
+pnpm run typecheck
 ```
 
 ## Docker Compose (Local Development)
@@ -158,7 +160,7 @@ services:
       POSTGRES_USER: studylab # ← Safe for local only
       POSTGRES_PASSWORD: studylab # ← Safe for local only
     ports:
-      - "5432:5432"
+      - "5433:5432" # host:container — avoids clashing with a local Postgres on 5432
 ```
 
 **These are safe to commit** because they're for local development only. Production will use environment variables from `.env`.
@@ -184,18 +186,20 @@ if (!API_URL) throw new Error("VITE_API_URL is not set");
 
 ```python
 # backend/app/config.py
-from pydantic_settings import BaseSettings
+from functools import lru_cache
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+
     database_url: str
     jwt_secret: str
-    google_client_id: str
-    google_client_secret: str
+    google_client_id: str = ""
+    google_client_secret: str = ""
 
-    class Config:
-        env_file = ".env"
-
-settings = Settings()
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()
 ```
 
 ### ❌ Wrong: Hardcoded secrets

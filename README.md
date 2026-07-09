@@ -17,57 +17,80 @@ Most tutorials drown you in theory. This is different. Each topic gives you:
 
 ## Tech Stack
 
-| Layer        | Tools                                              |
-| ------------ | -------------------------------------------------- |
-| Framework    | Vue 3 + TypeScript                                 |
-| Build        | Vite                                               |
-| State        | Pinia (with persisted state)                       |
-| i18n         | vue-i18n (EN / RU)                                 |
-| Styling      | SCSS (variables, mixins, modules)                  |
-| Testing      | Vitest (unit), Playwright (e2e), MSW (API mocking) |
-| Code Quality | ESLint (Antfu), Husky + lint-staged                |
+| Layer        | Tools                                                    |
+| ------------ | --------------------------------------------------------- |
+| Frontend     | Vue 3 + TypeScript, Vite, Pinia (persisted state)          |
+| Backend      | FastAPI, SQLAlchemy (async) + asyncpg, Alembic migrations  |
+| Auth         | OAuth2 via Authlib (Google; Twitch/Discord in progress)    |
+| i18n         | vue-i18n (EN / RU)                                         |
+| Styling      | SCSS (variables, mixins, modules)                          |
+| Testing      | Vitest + MSW (frontend unit), Playwright (e2e), Pytest (backend) |
+| Code Quality | ESLint (Antfu), Ruff + mypy (backend), Husky + lint-staged |
+| CI/CD        | GitHub Actions (`CI`, `Backend CI`), GitHub Pages + Railway deploy |
 
 ## Project Structure
 
 ```md
+frontend-study-lab/
+├── backend/ # FastAPI backend
+│ ├── app/
+│ │ ├── routes/ # auth, progress endpoints
+│ │ ├── models/ # SQLAlchemy models (User, UserProgress)
+│ │ ├── schemas/ # Pydantic request/response schemas
+│ │ ├── services/ # business logic (upsert user, progress)
+│ │ ├── utils/ # JWT helpers
+│ │ └── config.py # Settings loaded from .env
+│ ├── alembic/ # database migrations
+│ ├── tests/ # Pytest suite
+│ └── Dockerfile # deploy image (Railway)
+├── frontend/ # Vue 3 SPA (see below)
+├── docs/ # planning docs, AI assistant guide, topic skeleton
+├── .github/workflows/ # CI, Backend CI, deploy, bot automation
+├── .vscode/ # F5 launch config (db + backend debugger + frontend)
+├── docker-compose.yml # local Postgres for backend dev
+└── package.json
+
 frontend/
-├── api/ # API client layer (ready for backend)
+├── api/ # API client layer
 │ ├── client.ts # Fetch wrapper with JWT support
 │ ├── types.ts # Shared API types
 │ ├── progress.ts # Progress endpoints
-│ └── auth.ts # Auth endpoints
+│ └── auth.ts # Auth endpoints (login redirect, /me, logout)
 ├── assets/scss/ # Global styles (variables, mixins, demo-page)
 ├── components/
-│ ├── layout/
-│ │   ├── AppHeader.vue # Mobile header with burger and XP bar
-│ │   ├── AppSidebar.vue # Sidebar with navigation and categories
-│ │   └── AppOverlay.vue # Mobile sidebar overlay
+│ ├── auth/ # AuthButton, AuthModal (OAuth login)
+│ ├── layout/ # AppHeader, AppSidebar, AppOverlay, AppFooter, TopicPage
+│ ├── profile/ # UserCard, ProgressStats
 │ ├── topic/
 │   │   └── CompleteButton.vue # "Complete module" button
-│   ├── ui/
-│   │   ├── UiButton.vue # Reusable button (primary/secondary/ghost)
-│   │   ├── UiCard.vue # Card container with glass effect
-│   │   ├── UiBadge.vue # Difficulty badge (easy/medium/hard)
-│   │   ├── UiProgressBar.vue # XP progress bar
-│   │   ├── UiSpinner.vue # Loading spinner
-│   │   ├── UiModal.vue # Modal dialog
-│   │   ├── UiChip.vue # Chip/tag component
-│   │   ├── CodeBlock.vue # Code block with language highlighting
-│   │   └── UiIcon.vue # Icon wrapper (Iconify logos)
-│   └── LanguageSwitcher.vue # EN/RU language toggle
+│   └── ui/
+│       ├── UiButton.vue # Reusable button (primary/secondary/ghost)
+│       ├── UiCard.vue # Card container with glass effect
+│       ├── UiBadge.vue # Difficulty badge (easy/medium/hard)
+│       ├── UiProgressBar.vue # XP progress bar
+│       ├── UiSpinner.vue # Loading spinner
+│       ├── UiModal.vue # Modal dialog
+│       ├── UiChip.vue # Chip/tag component
+│       ├── ToastContainer.vue # Toast notifications
+│       ├── CodeBlock.vue # Code block with language highlighting
+│       └── UiIcon.vue # Icon wrapper (Iconify logos)
 ├── composables/
-│   └── useTopics.ts # Auto-scans topics/ → routes + navigation
+│   ├── useTopics.ts # Auto-scans topics/ → routes + navigation
+│   ├── useAuthGuard.ts # Route guard for authenticated pages
+│   └── useToast.ts # Toast notifications
 ├── helpers/
 │   └── useTopics.ts # Pure helper functions (slugify, buildCategory, etc.)
 ├── i18n/ # Translations (en.json, ru.json)
 ├── mocks/
-│   ├── topics.ts # Test mock data (mockTopicItems, mockTopicCategories)
-│   └── msw/ # MSW handlers for API mocking
+│   ├── handlers.ts # MSW handlers for API mocking
+│   └── topics.ts # Test mock data (mockTopicItems, mockTopicCategories)
 ├── pages/
-│   └── HomePage.vue # Dashboard with stats and categories
+│   ├── HomePage.vue # Dashboard with stats and categories
+│   ├── ProfilePage.vue # User profile (avatar, XP, completed modules)
+│   └── AuthCallback.vue # OAuth callback handler
 ├── stores/
 │   ├── progress.ts # Pinia store (XP, levels, completed modules)
-│   ├── auth.ts # Auth store (user, token)
+│   ├── auth.ts # Auth store (user, token, OAuth login/callback)
 │   └── ui.ts # UI store (sidebar, theme)
 ├── topics/ # Learning modules
 │   ├── js-core/ # ✅ 7 modules (bind, curry, debounce, etc.)
@@ -142,12 +165,35 @@ frontend/topics/<category>/<module>/
 
 ```bash
 pnpm run dev          # Start dev server
+pnpm run dev-wait     # Wait for local DB + backend, then start dev server
 pnpm run build        # Type check + production build
 pnpm run typecheck    # TypeScript check only
 pnpm run lint         # ESLint check
 pnpm run lint:fix     # ESLint auto-fix
 pnpm run test         # Vitest (watch mode)
 pnpm run test:run     # Vitest (single run)
+```
+
+## Backend
+
+FastAPI + PostgreSQL, source in `backend/`. Local setup:
+
+```bash
+docker-compose up -d db                 # Postgres on localhost:5433
+cd backend
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements-dev.txt
+alembic upgrade head
+uvicorn app.main:app --reload --port 8000
+```
+
+Or press **F5** in VS Code — `.vscode/launch.json` runs the whole stack (DB → backend with debugger → frontend) in one go.
+
+```bash
+cd backend
+pytest -q            # Tests
+ruff check app tests scripts   # Lint
+mypy                  # Type check
 ```
 
 ## Testing
@@ -195,9 +241,12 @@ pnpm run dev
 - [x] Layout components (AppHeader, AppSidebar, AppOverlay)
 - [x] Topic components (CompleteButton)
 - [x] Code blocks with overflow handling
-- [ ] E2E tests (Playwright)
-- [ ] Backend (FastAPI + PostgreSQL)
-- [ ] OAuth2 (Google, Twitch, Discord)
-- [ ] User profiles
+- [x] Backend (FastAPI + PostgreSQL + Alembic)
+- [x] OAuth2 — Google (Twitch, Discord in progress)
+- [x] User profiles
+- [x] Progress sync (frontend ↔ backend)
+- [x] CI/CD (GitHub Actions: `CI`, `Backend CI`, deploy)
+- [x] Deploy — GitHub Pages (frontend) + Railway (backend)
+- [ ] E2E tests (Playwright) wired into CI
 - [ ] Dark mode
-- [ ] Deploy to Railway
+- [ ] Nuxt migration (see `docs/MIGRATION.md`)

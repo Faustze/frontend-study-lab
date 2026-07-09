@@ -5,13 +5,17 @@ Thank you for your interest in contributing! This document explains how to set u
 ## Getting Prerequisites
 
 - **Node.js** 22+ and **pnpm**
+- **Python** 3.10+ (only if you're touching `backend/`)
+- **Docker** (for the local Postgres database, only if touching `backend/`)
 - **Git**
 - **VS Code** (recommended) with extensions:
   - `Vue.volar` — Vue 3 language support
   - `dbaeumer.vscode-eslint` — ESLint integration
-  - `esbenp.prettier-vscode` — Prettier formatting
+  - `ms-python.debugpy` — Python debugger (backend)
 
 ## Local Setup
+
+### Frontend
 
 ```bash
 # 1. Fork and clone
@@ -30,14 +34,47 @@ pnpm run dev
 
 The app will be available at `http://localhost:5173` (or next available port).
 
+### Backend (only if you're changing `backend/`)
+
+```bash
+# 1. Local Postgres
+docker-compose up -d db
+
+# 2. Python virtual environment
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+
+# 3. Environment file
+cp .env.example .env   # fill in OAuth credentials if testing login
+
+# 4. Migrate and run
+alembic upgrade head
+uvicorn app.main:app --reload --port 8000
+```
+
+The API will be available at `http://localhost:8000` (`/health` should return `{"status": "ok"}`).
+
+**Tip:** press **F5** in VS Code instead — `.vscode/launch.json` starts the DB, the backend (with the Python debugger attached), and the frontend (waiting for both to be ready) in one go.
+
 ## Project Structure
 
 ```md
 frontend-study-lab/
+├── backend/ # FastAPI backend (Python)
+│ ├── app/
+│ │ ├── routes/ # auth, progress endpoints
+│ │ ├── models/ # SQLAlchemy models
+│ │ ├── schemas/ # Pydantic schemas
+│ │ ├── services/ # business logic
+│ │ └── config.py # Settings (.env)
+│ ├── alembic/ # database migrations
+│ └── tests/ # Pytest suite
 ├── frontend/ # Main application code
 │ ├── api/ # API client layer
 │ ├── assets/scss/ # Global styles
-│ ├── components/ # Reusable components
+│ ├── components/ # Reusable components (auth/, layout/, profile/, ui/, topic/)
 │ ├── composables/ # Vue composables
 │ ├── i18n/ # Translations (en/ru)
 │ ├── mocks/ # MSW API mocks
@@ -57,13 +94,14 @@ frontend-study-lab/
 │ ├── main.ts # Entry point
 │ └── router.ts # Route definitions
 ├── docs/
-│ ├── AI-GUIDE.md # AI assistant rules
-│ ├── plan-frontend.md # Development roadmap
-│ ├── plan-backend.md # Backend roadmap
+│ ├── AGENTS.md # AI assistant rules
+│ ├── plan-frontend.md # Frontend development roadmap
+│ ├── plan-backend.md # Backend development roadmap
 │ └── skeleton.md # Topic creation template
 ├── .husky/ # Git hooks
-├── .github/workflows/ # CI/CD (future)
-├── index.html # HTML entry
+├── .github/workflows/ # CI, Backend CI, deploy, bot automation
+├── .vscode/ # F5 launch config (db + backend debugger + frontend)
+├── docker-compose.yml # Local Postgres for backend dev
 ├── package.json # Dependencies and scripts
 └── README.md # Project overview
 ```
@@ -103,9 +141,22 @@ pnpm run lint
 # Fix lint errors automatically
 pnpm run lint:fix
 
+# Unit tests
+pnpm run test:run
+
 # Build (verifies everything compiles)
 pnpm run build
 ```
+
+If you touched `backend/`, also run (from `backend/`, with the venv active):
+
+```bash
+ruff check app tests scripts
+mypy
+pytest -q
+```
+
+These are exactly the checks `CI` and `Backend CI` run on the PR, so a clean run locally means the required status checks should pass too.
 
 ### 4. Commit
 
