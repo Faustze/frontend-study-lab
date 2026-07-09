@@ -1,5 +1,6 @@
 name: CI
 
+# temp: trigger a PR to verify required status checks (test/verify-required-checks)
 on:
   push:
     branches: [main]
