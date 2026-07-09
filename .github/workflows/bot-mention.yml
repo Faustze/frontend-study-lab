@@ -21,9 +21,23 @@ jobs:
         with:
           token: ${{ secrets.BOT_PAT }}
           fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.BOT_PAT }}
           trigger_phrase: "@faustze-bot"
-          claude_args: "--model claude-sonnet-5 --max-turns 30"
+          branch_prefix: "bot/"
+          claude_args: >-
+            --model claude-sonnet-5 --max-turns 30
+            --allowedTools "Bash(pnpm test:*),Bash(pnpm run test:*),Bash(pnpm lint:*),Bash(pnpm run lint:*),Bash(pnpm typecheck:*),Bash(pnpm run typecheck:*),Bash(pnpm build:*),Bash(pnpm run build:*),Bash(pnpm install:*),Bash(pnpm exec vitest:*)"

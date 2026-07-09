@@ -141,13 +141,13 @@ frontend/topics/<category>/<module>/
 ## Commands
 
 ```bash
-npm run dev          # Start dev server
-npm run build        # Type check + production build
-npm run typecheck    # TypeScript check only
-npm run lint         # ESLint check
-npm run lint:fix     # ESLint auto-fix
-npm run test         # Vitest (watch mode)
-npm run test:run     # Vitest (single run)
+pnpm run dev          # Start dev server
+pnpm run build        # Type check + production build
+pnpm run typecheck    # TypeScript check only
+pnpm run lint         # ESLint check
+pnpm run lint:fix     # ESLint auto-fix
+pnpm run test         # Vitest (watch mode)
+pnpm run test:run     # Vitest (single run)
 ```
 
 ## Testing
@@ -155,9 +155,9 @@ npm run test:run     # Vitest (single run)
 Tests use Vitest with jsdom environment. Mock data lives in `frontend/mocks/`.
 
 ```bash
-npm run test:run     # Run all tests once
-npm run test         # Watch mode
-npx vitest run frontend/tests/useTopics.test.ts  # Single file
+pnpm run test:run     # Run all tests once
+pnpm run test         # Watch mode
+pnpm exec vitest run frontend/tests/useTopics.test.ts  # Single file
 ```
 
 ## Development
@@ -173,11 +173,11 @@ Want to contribute? See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
 Quick start:
 
 ```bash
-git clone https://github.com/Faustze/frontend-study-lab.git
+git clone https://github.com/Faustzer/frontend-study-lab.git
 cd frontend-study-lab
-npm install
+pnpm install
 cp frontend/.env.example frontend/.env
-npm run dev
+pnpm run dev
 ```
 
 ## Roadmap

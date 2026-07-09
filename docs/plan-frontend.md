@@ -216,6 +216,7 @@
 - [ ] Improve mobile responsiveness
 - [ ] Add keyboard navigation support
 - [ ] Add loading skeletons
+- [ ] Shadcn init (?)
 
 ### 4.2 Performance
 

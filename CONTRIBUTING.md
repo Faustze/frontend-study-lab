@@ -4,7 +4,7 @@ Thank you for your interest in contributing! This document explains how to set u
 
 ## Getting Prerequisites
 
-- **Node.js** 20+ and **npm**
+- **Node.js** 22+ and **pnpm**
 - **Git**
 - **VS Code** (recommended) with extensions:
   - `Vue.volar` — Vue 3 language support
@@ -19,13 +19,13 @@ git clone https://github.com/YOUR_USERNAME/frontend-study-lab.git
 cd frontend-study-lab
 
 # 2. Install dependencies
-npm install
+pnpm install
 
 # 3. Create environment file
 cp frontend/.env.example frontend/.env
 
 # 4. Start dev server
-npm run dev
+pnpm run dev
 ```
 
 The app will be available at `http://localhost:5173` (or next available port).
@@ -95,16 +95,16 @@ Branch naming:
 
 ```bash
 # Type checking
-npm run typecheck
+pnpm run typecheck
 
 # Linting
-npm run lint
+pnpm run lint
 
 # Fix lint errors automatically
-npm run lint:fix
+pnpm run lint:fix
 
 # Build (verifies everything compiles)
-npm run build
+pnpm run build
 ```
 
 ### 4. Commit
@@ -236,7 +236,7 @@ export function delegate(
 - Routing is automatic (via `useTopics` composable)
 - Navigation updates automatically
 - XP and progress tracking work automatically
-- Run `npm run lint` and `npm run build` to verify
+- Run `pnpm run lint` and `pnpm run build` to verify
 
 ## Code Style
 

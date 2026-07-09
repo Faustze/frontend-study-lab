@@ -1,0 +1,6 @@
+allowBuilds:
+  '@parcel/watcher': true
+  msw: true
+onlyBuiltDependencies:
+  - "@parcel/watcher"
+  - msw
