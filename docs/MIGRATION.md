@@ -56,10 +56,10 @@ outdated). Modules: `@pinia/nuxt`, `@nuxtjs/i18n` v10+, `@nuxt/test-utils`.
 
 ## Phase 0: Preparation (~1 day)
 
-- [ ] All checks green: `pnpm run lint && pnpm run typecheck && pnpm run test:run && pnpm run build`
-- [ ] Run e2e: `pnpm run test:e2e` — this is the migration's regression net
-- [ ] Snapshot the state: `git tag v1.0.0-spa`
-- [ ] Do the migration in a long-lived `feat/nuxt-migration` branch; merge to
+- [x] All checks green: `pnpm run lint && pnpm run typecheck && pnpm run test:run && pnpm run build`
+- [x] Run e2e: `pnpm run test:e2e` — this is the migration's regression net
+- [x] Snapshot the state: `git tag v1.0.0-vite` (pushed 2026-07-10)
+- [x] Do the migration in a long-lived `feat/nuxt-migration` branch; merge to
       main only when e2e passes against the Nuxt build
 
 ## Phase 1: Nuxt skeleton in SPA mode (~2-4 days)
@@ -67,16 +67,29 @@ outdated). Modules: `@pinia/nuxt`, `@nuxtjs/i18n` v10+, `@nuxt/test-utils`.
 Goal: the app runs on Nuxt with `ssr: false` — behavior identical to today,
 only the scaffolding changes. No SSR code at this step.
 
-- [ ] `pnpm add nuxt@^4 @pinia/nuxt @nuxtjs/i18n && pnpm add -D @nuxt/test-utils`
-- [ ] `nuxt.config.ts`: `ssr: false`, alias `@/` → `frontend/`, SCSS via
-      `css` + `vite.css.preprocessorOptions` (variables/mixins in additionalData)
-- [ ] `App.vue` → `app.vue` + `layouts/default.vue` (sidebar, header, footer, modals)
-- [ ] `pages/index.vue` (HomePage), `pages/profile.vue`, `pages/auth/callback.vue`
-- [ ] Topics: `pages/[category]/[module].vue` — dynamic route on top of the
-      existing `useTopics` (keep the glob catalog, it is the data source)
-- [ ] Delete `router.ts`; move the `useAuthGuard` guard to `middleware/auth.global.ts`
-- [ ] `main.ts` → `plugins/` (Pinia persistedstate, MSW for dev)
-- [ ] Verify: `nuxt dev` + all e2e green
+- [x] `pnpm add nuxt@^4 @pinia/nuxt && pnpm add -D @nuxt/test-utils`
+      (@nuxtjs/i18n deferred to Phase 2; vue-i18n stays as a manual plugin for now)
+- [x] `nuxt.config.ts`: `ssr: false`, `srcDir: 'frontend/'` (Nuxt's own `@` alias),
+      SCSS via `css: ['@/assets/scss/index.scss']` — no additionalData needed,
+      components already `@use` variables explicitly
+- [x] `App.vue` → `app.vue` + `layouts/default.vue` (sidebar, header, footer, modals)
+- [x] `pages/index.vue` (HomePage), `pages/profile.vue`, `pages/auth/callback.vue`
+- [x] Topics: `pages/[category]/[module].vue` — dynamic route on top of the
+      existing `useTopics` (glob catalog works in Nuxt as-is)
+- [x] Delete `router.ts`; move the `useAuthGuard` guard to `middleware/auth.global.ts`
+      (`definePageMeta({ requiresAuth: true })` on profile page)
+- [x] `main.ts` → `plugins/` (Pinia persistedstate, i18n, MSW for dev, route-loading skeleton)
+- [x] Verify: `nuxt dev` + all e2e green (21 passed / 6 skipped — same as the SPA baseline)
+
+Phase 1 notes (done 2026-07-10):
+
+- vue-router aligned to v5 (Nuxt 4 ships it; a direct v4 dep broke `nuxt typecheck`).
+- Root `tsconfig.json` with references to `.nuxt/tsconfig.*`; `nuxt typecheck`
+  replaces the old vue-tsc script. Compiler options match the old config
+  (`noUncheckedIndexedAccess: false`), tests excluded as before.
+- e2e moved from port 5173 to 3000; one selector fixed in progress.spec.ts
+  (`getByText('bind')` is ambiguous on a rendered topic page).
+- Named route `home` replaced with path `/` in navigation calls.
 
 ## Phase 2: i18n, stores, API (~2-3 days)
 
